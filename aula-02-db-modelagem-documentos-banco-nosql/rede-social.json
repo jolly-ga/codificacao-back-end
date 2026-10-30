@@ -1,0 +1,13 @@
+{
+ "texto":"as greves de motoristas de ônibus em macapá estão se tornando cada vez mais frequentes",
+"autor":"João_Guilherme",
+"data":"18/10/2026",
+"curtidas":[
+    {"nome": "Ana Maria Braga"},
+    {"nome": "Erika Hilton"}
+],
+"comentarios":[
+ {"autor": "Ana Maria Braga", "texto":"que isso menina, absurdo.", "data": "19/10/2026"},
+ {"autor": "Erika Hilton", "texto": "injustiça com a classe trabalhadora!", "data": "20/10/2026"}
+]
+}
