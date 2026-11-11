@@ -11,37 +11,38 @@ import { ApiTags, ApiResponse, ApiOperation, ApiQuery } from "@nestjs/swagger";
 export class AlunosController {
     constructor(private readonly alunosService: AlunosService){}
 
-        @Post()
-        @ApiOperation({
+         @Post()
+         @ApiOperation({
             summary: 'criar a Matrícula do aluno',
-        })
-        @ApiResponse({
+         })
+         @ApiResponse({
             status: 201,
             description: 'Aluno criado com sucesso',
-        })
+     })
          @ApiResponse({
             status: 400,
             description: 'Requisição inválida ou dados de entrada incorretos/mal formatados'
-         })
-        create(@Body() createAlunoDto: CreateAlunoDto){
+      })
+     create(@Body() createAlunoDto: CreateAlunoDto){
             return this.alunosService.create(createAlunoDto);
-        }
+     }
 
-        @Get()
-        @ApiOperation({
-            summary: 'Listar todos os alunos',
-        })
-        @ApiResponse({
-            status: 200,
-            description: 'Lista de alunos retornada com sucesso',
-        })
-         @ApiResponse({
-            status: 404,
-            description:'Nenhum aluno encontrado',
-         })
+        // @Get()
+        // @ApiOperation({
+        //     summary: 'Listar todos os alunos',
+        // })
+        // @ApiResponse({
+        //     status: 200,
+        //     description: 'Lista de alunos retornada com sucesso',
+        // })
+        //  @ApiResponse({
+        //     status: 404,
+        //     description:'Nenhum aluno encontrado',
+        //  })
         //  findAll(){
             // return this.alunosService.findAll();
         // }
+
         @Get()
         @ApiOperation({
             summary: 'Listar alunos com paginação',
@@ -70,9 +71,25 @@ export class AlunosController {
             type: Number,
             description: 'número de intes por página (padrão: 10)',
         })
+        @ApiQuery({
+            name: 'nome',
+            required: false,
+            type: String,
+            description: 'Filtrar alunos pelo curso (Ex: Jamilly)',
+        })
+         @ApiQuery({
+            name: 'curso',
+            required: false,
+            type: String,
+            description: 'Filtrar alunos pelo curso (Ex: Engenharia civil)',
+        })
+
         findPage(@Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number){
-        return this.alunosService.findPage(page, limit);
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+@Query('nome') nome?: string,
+@Query('curso') curso?: string,
+){
+        return this.alunosService.findPage(page, limit, nome, curso);
     }
 
         @Get(':id')
