@@ -1,17 +1,38 @@
-import { Injectable , NotFoundException, ConflictException, InternalServerErrorException} from "@nestjs/common";
+import { Injectable , NotFoundException, ConflictException, InternalServerErrorException, Inject} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreateAlunoDto } from "./dto/create-aluno.dto.js";
 import { UpdateAlunoDto } from "./dto/update-aluno.dto.js";
 import { Aluno, AlunoDoc } from "./schemas/aluno.schema.js";
 import { MongoServerError } from 'mongodb';
-
-
+import { ConfigService } from "@nestjs/config";
+import { variaveisDeAmbiente } from "../config/env.config.js";
+import type { ConfigType } from "@nestjs/config";
+import databaseConfig from "../config/database.config.js";
 
 @Injectable()
 export class AlunosService {
-    constructor(@InjectModel(Aluno.name) private alunoModel: Model<Aluno>){}
+    constructor(@InjectModel(Aluno.name) private alunoModel: Model<Aluno>,
+               private readonly configservice: ConfigService<variaveisDeAmbiente, true>,
+              @Inject(databaseConfig.KEY) private dbconfig: ConfigType<typeof databaseConfig>){
+                console.log(`Conectado em ${this.dbconfig.uri}`);
+                console.log(`Pool máximo: ${this.dbconfig.maxPoolSize}`);
+              }
 
+               configuracoesDeAmbiente(){
+                const nodeEnv: string = this.configservice.get('NODE_ENV',{
+                infer:true
+                })
+                const port = this.configservice.get('PORT', {
+                    infer: true,
+                })
+                const databaseUri = this.configservice.get('DATABASE_URI', {
+                    infer: true,
+                })
+                const jwtSecret = this.configservice.get('JWT_SECRET', {
+                    infer: true,
+                })
+               }
     //! CRUD
     //! C - Create (CRIAR)
     //! R - Read (LER/CONSULTAR)
